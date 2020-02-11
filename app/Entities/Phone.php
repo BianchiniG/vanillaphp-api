@@ -7,61 +7,6 @@ include_once('Logger.php');
 class Phone extends Entity {
     private $table = 'phones';
 
-    private $first_name;
-    private $last_name;
-    private $phone_number;
-    private $phonebook_id;
-    private $created;
-    private $modified;
-
-    public function getFirstName() {
-        return $this->first_name;
-    }
-
-    public function setFirstName($first_name) {
-        $this->first_name = $first_name;
-    }
-
-    public function getLastName() {
-        return $this->last_name;
-    }
-
-    public function setLastName($last_name) {
-        $this->last_name = $last_name;
-    }
-
-    public function getPhoneNumber() {
-        return $this->phone_number;
-    }
-
-    public function setPhoneNumber($phone_number) {
-        $this->phone_number = $phone_number;
-    }
-
-    public function getPhonebookId() {
-        return $this->phonebook_id;
-    }
-
-    public function setPhonebookId($phonebook_id) {
-        $this->phonebook_id = $phonebook_id;
-    }
-
-    public function getCreated() {
-        return $this->created;
-    }
-
-    private function setCreated($created) {
-        $this->created = $created;
-    }
-
-    public function getModified() {
-        return $this->modified;
-    }
-
-    public function setModified($modified) {
-        $this->modified = $modified;
-    }
-
     public function create($data) {
         $query = "INSERT INTO $this->table SET first_name=:first_name, last_name=:last_name, phone_number=:phone_number, phonebook_id=:phonebook_id";
         $stmt = $this->getDBResource()->prepare($query);
