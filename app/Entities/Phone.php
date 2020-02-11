@@ -67,10 +67,10 @@ class Phone extends Entity {
         $stmt = $this->getDBResource()->prepare($query);
 
         $phone = [];
-        $phone['first_name'] = htmlspecialchars(strip_tags($phone['first_name']));
-        $phone['last_name'] = htmlspecialchars(strip_tags($phone['last_name']));
-        $phone['phone_number'] = htmlspecialchars(strip_tags($phone['phone_number']));
-        $phone['phonebook_id'] = htmlspecialchars(strip_tags($phone['phonebook_id']));
+        $phone['first_name'] = htmlspecialchars(strip_tags($data['first_name']));
+        $phone['last_name'] = htmlspecialchars(strip_tags($data['last_name']));
+        $phone['phone_number'] = htmlspecialchars(strip_tags($data['phone_number']));
+        $phone['phonebook_id'] = htmlspecialchars(strip_tags($data['phonebook_id']));
         $stmt->bindParam(":first_name", $phone['first_name']);
         $stmt->bindParam(":last_name", $phone['last_name']);
         $stmt->bindParam(":phone_number", $phone['phone_number']);
