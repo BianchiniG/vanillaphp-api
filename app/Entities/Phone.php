@@ -82,11 +82,11 @@ class Phone extends Entity {
     }
 
     public function delete($id) {
-        $query = "DELETE FROM $this->table WHERE id = ?";
-        $stmt = $this->conn->prepare($query);
+        $query = "DELETE FROM $this->table WHERE id = :id";
+        $stmt = $this->getDBResource()->prepare($query);
 
         $id = htmlspecialchars(strip_tags($id));
-        $stmt->bindParam(1, $id);
+        $stmt->bindParam(':id', $id);
 
         if ($stmt->execute()) {
             return true;
