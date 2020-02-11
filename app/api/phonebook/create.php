@@ -12,13 +12,11 @@ $database = new Database();
 $db = $database->getConnection();
 
 $phonebook = new Phonebook($db);
-$data = json_decode(file_get_contents("php://input"));
+$data = json_decode(file_get_contents("php://input"), true);
 
-if (!empty($data->name) && !empty($data->description)) {
-    $phonebook->setName($data->name);
-    $phonebook->setDescription($data->description);
-    
-    if ($phonebook->create()) {
+
+if (isset($data['name']) && isset($data['description'])) {
+    if ($phonebook->create($data)) {
         http_response_code(201);
         echo json_encode(array("message" => "Phonebook was created."));
     } else {

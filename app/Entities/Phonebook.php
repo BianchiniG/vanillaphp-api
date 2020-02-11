@@ -33,14 +33,15 @@ class Phonebook extends Entity {
         $this->description = $description;
     }
 
-    public function create() {
+    public function create($data) {
         $query = "INSERT INTO $this->table SET name=:name, description=:description";
         $stmt = $this->getDBResource()->prepare($query);
 
-        $this->name=htmlspecialchars(strip_tags($this->name));
-        $this->description=htmlspecialchars(strip_tags($this->description));
-        $stmt->bindParam(":name", $this->name);
-        $stmt->bindParam(":description", $this->description);
+        $phonebook = [];
+        $phonebook['name'] = htmlspecialchars(strip_tags($data['name']));
+        $phonebook['description'] = htmlspecialchars(strip_tags($data['description']));
+        $stmt->bindParam(":name", $phonebook['name']);
+        $stmt->bindParam(":description", $phonebook['description']);
 
         if ($stmt->execute()) {
             return true;
@@ -53,7 +54,6 @@ class Phonebook extends Entity {
         try {
             $stmt = $this->getDBResource()->prepare($query);
             $stmt->execute();
-            Logger::write('debug', print_r($stmt, true));
             return $stmt;
         } catch (\Exception $e) {
             Logger::write('error', print_r($e, true));
