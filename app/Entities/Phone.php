@@ -5,10 +5,10 @@ include_once('Logger.php');
 
 
 class Phone extends Entity {
-    private $table = 'phones';
+    const TABLE_NAME = 'phones';
 
     public function create($data) {
-        $query = "INSERT INTO $this->table SET first_name=:first_name, last_name=:last_name, phone_number=:phone_number, phonebook_id=:phonebook_id";
+        $query = "INSERT INTO ".Phone::TABLE_NAME." SET first_name=:first_name, last_name=:last_name, phone_number=:phone_number, phonebook_id=:phonebook_id";
         $stmt = $this->getDBResource()->prepare($query);
 
         $phone = [];
@@ -28,7 +28,7 @@ class Phone extends Entity {
     }
 
     public function read() {
-        $query = "SELECT * FROM $this->table;";
+        $query = "SELECT * FROM ".Phone::TABLE_NAME.";";
 
         try {
             $stmt = $this->getDBResource()->prepare($query);
@@ -40,14 +40,14 @@ class Phone extends Entity {
     }
 
     public function get($id) {
-        $query = "SELECT * FROM $this->table where id=$id;";
+        $query = "SELECT * FROM ".Phone::TABLE_NAME." where id=$id;";
         $stmt = $this->getDBResource()->prepare($query);
         $stmt->execute();
         return $stmt;
     }
 
     public function update($id, $data) {
-        $query = "UPDATE $this->table SET first_name = :first_name, last_name = :last_name, phone_number = :phone_number, phonebook_id = :phonebook_id WHERE id = :id";
+        $query = "UPDATE ".Phone::TABLE_NAME." SET first_name = :first_name, last_name = :last_name, phone_number = :phone_number, phonebook_id = :phonebook_id WHERE id = :id";
         $stmt = $this->getDBResource()->prepare($query);
 
         $phone = $this->get($id);
@@ -82,7 +82,7 @@ class Phone extends Entity {
     }
 
     public function delete($id) {
-        $query = "DELETE FROM $this->table WHERE id = :id";
+        $query = "DELETE FROM ".Phone::TABLE_NAME." WHERE id = :id";
         $stmt = $this->getDBResource()->prepare($query);
 
         $id = htmlspecialchars(strip_tags($id));

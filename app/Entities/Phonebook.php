@@ -3,10 +3,10 @@
 include_once('Entity.php');
 
 class Phonebook extends Entity {
-    private $table = 'phonebooks';
+    const TABLE_NAME = 'phonebooks';
 
     public function create($data) {
-        $query = "INSERT INTO $this->table SET name=:name, description=:description";
+        $query = "INSERT INTO ".Phonebook::TABLE_NAME." SET name=:name, description=:description";
         $stmt = $this->getDBResource()->prepare($query);
 
         $phonebook = [];
@@ -22,7 +22,7 @@ class Phonebook extends Entity {
     }
 
     public function read() {
-        $query = "SELECT * FROM $this->table;";
+        $query = "SELECT * FROM ".Phonebook::TABLE_NAME.";";
         try {
             $stmt = $this->getDBResource()->prepare($query);
             $stmt->execute();
@@ -33,14 +33,14 @@ class Phonebook extends Entity {
     }
 
     public function get($id) {
-        $query = "SELECT * FROM $this->table where id=$id;";
+        $query = "SELECT * FROM ".Phonebook::TABLE_NAME." where id=$id;";
         $stmt = $this->getDBResource()->prepare($query);
         $stmt->execute();
         return $stmt;
     }
 
     function update($id, $data) {
-        $query = "UPDATE $this->table SET name = :name, description = :description WHERE id = :id";
+        $query = "UPDATE ".Phonebook::TABLE_NAME." SET name = :name, description = :description WHERE id = :id";
         $stmt = $this->getDBResource()->prepare($query);
 
         $phonebook = $this->get($id);
