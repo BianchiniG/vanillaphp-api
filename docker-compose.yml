@@ -1,0 +1,24 @@
+version: '3'
+services:
+  app:
+    image: webdevops/php-apache:alpine
+    container_name: zipdev_app
+    ports:
+      - 9000:80
+    volumes:
+      - ./app:/app
+    depends_on:
+      - database
+  database:
+    image: mysql:5.7
+    container_name: zipdev_bdd
+    ports:
+      - 33060:3306
+    volumes:
+      - ./database_files:/var/lib/mysql
+    environment:
+      MYSQL_DATABASE: zipdev_test
+      MYSQL_USER: zipdev
+      MYSQL_PASSWORD: test
+      MYSQL_ROOT_PASSWORD: test
+
