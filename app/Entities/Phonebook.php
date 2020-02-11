@@ -67,20 +67,28 @@ class Phonebook extends Entity {
         return $stmt;
     }
 
-    function update($id) {
-        // TODO: Load the data beforehand to fill the non-updated fields.
+    function update($id, $data) {
         $query = "UPDATE $this->table SET name = :name, description = :description WHERE id = :id";
-
         $stmt = $this->getDBResource()->prepare($query);
 
-        $this->setName(htmlspecialchars(strip_tags($this->getName())));
-        $this->setDescription(htmlspecialchars(strip_tags($this->getDescription())));
-        $stmt->bindParam(':name', $this->name);
-        $stmt->bindParam(':description', $this->description);
-        $stmt->bindParam(':id', $id);
+        $phonebook = $this->get($id);
 
-        if ($stmt->execute()) {
-            return true;
+        if ($phonebook) {
+            $phonebook = $phonebook->fetch(PDO::FETCH_ASSOC);
+            if (isset($data['name']) && $phonebook['name'] != $data['name']) {
+                $phonebook['name'] = htmlspecialchars(strip_tags($data['name']));
+            }
+            if (isset($data['description']) && $phonebook['description'] != $data['description']) {
+                $phonebook['description'] = htmlspecialchars(strip_tags($data['description']));
+            }
+            
+            $stmt->bindParam(':name', $phonebook['name']);
+            $stmt->bindParam(':description', $phonebook['description']);
+            $stmt->bindParam(':id', $id);
+    
+            if ($stmt->execute()) {
+                return true;
+            }
         }
         return false;
     }

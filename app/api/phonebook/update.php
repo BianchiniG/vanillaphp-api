@@ -13,15 +13,17 @@ $database = new Database();
 $db = $database->getConnection();
 
 $phonebook = new Phonebook($db);
-$data = json_decode(file_get_contents("php://input"));
+$data = json_decode(file_get_contents("php://input"), true);
 
-$phonebook->setName($data->name);
-$phonebook->setDescription($data->description);
-
-if ($phonebook->update($data->id)) {
-    http_response_code(200);
-    echo json_encode(array("message" => "Phonebook was updated."));
+if (isset($data['id'])) {
+    if ($phonebook->update($data['id'], $data)) {
+        http_response_code(200);
+        echo json_encode(array("message" => "Phonebook was updated."));
+    } else {
+        http_response_code(503);
+        echo json_encode(array("message" => "Unable to update phonebook."));
+    }
 } else {
-    http_response_code(503);
-    echo json_encode(array("message" => "Unable to update phonebook."));
+    http_response_code(400);
+    echo json_encode(array("message" => "Unable to update phonebook. The ID must be provided."));
 }
