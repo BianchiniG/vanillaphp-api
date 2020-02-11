@@ -12,17 +12,24 @@ $database = new Database();
 $db = $database->getConnection();
 
 $phonebook = new Phonebook($db);
-$data = json_decode(file_get_contents("php://input"));
+$data = json_decode(file_get_contents("php://input"), true);
 
-if (!empty($data->id) && !empty($data->cascade)) {
-    if ($phonebook->delete($data->id, $data->cascade)) {
-        http_response_code(200);
-        echo json_encode(array("message" => "Phonebook was deleted."));
-    } else {
-        http_response_code(503);
-        echo json_encode(array("message" => "Unable to delete phonebook."));
+
+if (isset($data['id'])) {
+    try {
+        $delete_action = $phonebook->delete($data['id'], $data['cascade']);
+        if ($delete_action) {  // TODO: Unhandled exception.
+            http_response_code(200);
+            echo json_encode(array("message" => "Phonebook was deleted."));
+        } else {
+            http_response_code(503);
+            echo json_encode(array("message" => "Unable to delete phonebook: Check if it has phone numbers assigned."));
+        }
+    } catch (\Exception $e) {
+        http_response_code(400);
+        echo json_encode(array("message" => "Unable to delete phonebook: ".$e->getMessage()));    
     }
 } else {
     http_response_code(400);
-    echo json_encode(array("message" => "Unable to delete phonebook. Data is incomplete."));
+    echo json_encode(array("message" => "Unable to delete phonebook: The ID must be provided."));
 }

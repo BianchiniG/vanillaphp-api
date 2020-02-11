@@ -1,6 +1,9 @@
 <?php
 
 include_once('Entity.php');
+include_once('Phone.php');
+include_once('Logger.php');
+
 
 class Phonebook extends Entity {
     const TABLE_NAME = 'phonebooks';
@@ -39,7 +42,7 @@ class Phonebook extends Entity {
         return $stmt;
     }
 
-    function update($id, $data) {
+    public function update($id, $data) {
         $query = "UPDATE ".Phonebook::TABLE_NAME." SET name = :name, description = :description WHERE id = :id";
         $stmt = $this->getDBResource()->prepare($query);
 
@@ -65,18 +68,37 @@ class Phonebook extends Entity {
         return false;
     }
 
-    function delete($id, $cascade = false) {
-        // TODO: Check if the user selected a cascade deletion.
+    public function delete($id, $cascade = false) {
+        if ($cascade) {
+            $this->clearPhonebook($id);
+        }
 
-        $query = "DELETE FROM $this->table WHERE id = ?";
-        $stmt = $this->conn->prepare($query);
-
-        $id = htmlspecialchars(strip_tags($id));
-        $stmt->bindParam(1, $id);
+        $query = "DELETE FROM ".Phonebook::TABLE_NAME." WHERE id = :phonebook_id";
+        $stmt = $this->getDBResource()->prepare($query);
+        $phonebook_id = htmlspecialchars(strip_tags($id));
+        $stmt->bindParam(":phonebook_id", $phonebook_id);
 
         if ($stmt->execute()) {
             return true;
         }
         return false;
+    }
+
+    public function clearPhonebook($phonebook_id) {
+        $query = "SELECT * FROM ".Phone::TABLE_NAME." WHERE phonebook_id = :phonebook_id;";
+        $stmt = $this->getDBResource()->prepare($query);
+        $stmt->bindParam(':phonebook_id', $phonebook_id);
+        $stmt->execute();
+
+        if ($stmt->rowCount() > 0) {
+            foreach ($stmt->fetchAll(PDO::FETCH_ASSOC) as $phone) {
+                $query = "DELETE FROM ".Phone::TABLE_NAME." WHERE id = ".$phone['id'].";";
+                $stmt = $this->getDBResource()->prepare($query);
+
+                if (!$stmt->execute()) {
+                    throw new \Exception("Phone ".$phone['phone_number']." (".$phone['id'].") could not be deleted. Action aborted.");
+                }
+            }
+        }
     }
 }
