@@ -1,9 +1,7 @@
 <?php
 
-// include_once('../Utilities/Logger.php');
-
 class Database {
-    private $host = "172.26.0.2";
+    private $host = "database";
     private $db_name = "zipdev_test";
     private $username = "root";
     private $password = "test";
