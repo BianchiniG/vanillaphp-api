@@ -175,4 +175,25 @@ class PhonebookEntry extends Entity {
             throw new \Exception("One or more relationships couldn't be deleted. Please, try again.");
         }
     }
+
+    public function findByPhonebookId($id) {
+        $query = "SELECT * FROM ".PhonebookEntry::TABLE_NAME." where phonebook_id=$id;";
+        $stmt = $this->getDBResource()->prepare($query);
+        $stmt->execute();
+
+        $phonebook_entries = [];
+        if ($stmt->rowCount()) {
+            foreach ($stmt->fetchAll(PDO::FETCH_ASSOC) as $phonebook) {
+                $phone = new Phone($this->getDBResource());
+                $email = new Email($this->getDBResource());
+
+                $phonebook_entry = $phonebook;
+                $phonebook_entry['phone_numbers'] = $phone->findByPhonebookEntryId($phonebook_entry['id']);
+                $phonebook_entry['emails'] = $email->findByPhonebookEntryId($phonebook_entry['id']);
+                $phonebook_entries []= $phonebook_entry;
+            }
+        }
+
+        return $phonebook_entries;
+    }
 }

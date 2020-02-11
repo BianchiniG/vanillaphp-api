@@ -1,12 +1,29 @@
 <?php
 
 include_once('Entity.php');
+include_once('PhonebookEntry.php');
 include_once('Phone.php');
 include_once('Logger.php');
 
 
 class Phonebook extends Entity {
     const TABLE_NAME = 'phonebooks';
+
+    public function get($id) {
+        $query = "SELECT * FROM ".Phonebook::TABLE_NAME." where id=$id;";
+        $stmt = $this->getDBResource()->prepare($query);
+        $stmt->execute();
+
+        $phonebook = null;
+        if ($stmt->rowCount()) {
+            $phonebook_entry = new PhonebookEntry($this->getDBResource());
+
+            $phonebook = $stmt->fetch(PDO::FETCH_ASSOC);
+            $phonebook['phonebook_entries'] = $phonebook_entry->findByPhonebookId($id);
+        }
+
+        return $phonebook;
+    }
 
     public function create($data) {
         $query = "INSERT INTO ".Phonebook::TABLE_NAME." SET name=:name, description=:description";
@@ -33,13 +50,6 @@ class Phonebook extends Entity {
         } catch (\Exception $e) {
             Logger::write('error', print_r($e, true));
         }
-    }
-
-    public function get($id) {
-        $query = "SELECT * FROM ".Phonebook::TABLE_NAME." where id=$id;";
-        $stmt = $this->getDBResource()->prepare($query);
-        $stmt->execute();
-        return $stmt;
     }
 
     public function update($id, $data) {
