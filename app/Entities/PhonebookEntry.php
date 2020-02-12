@@ -46,20 +46,24 @@ class PhonebookEntry extends Entity {
             $phonebook_entry_id = $this->getDBResource()->lastInsertId(PhonebookEntry::TABLE_NAME);
 
             try {
-                $phone = new Phone($this->getDBResource());
-                foreach ($phone_numbers as $phone_number) {
-                    $phone->create(['phone_number' => $phone_number, 'phonebook_entry_id' => $phonebook_entry_id]);
+                if (isset($data['phone_numbers'])) {
+                    $Phone = new Phone($this->getDBResource());
+                    foreach ($data['phone_numbers'] as $phone_number) {
+                        $Phone->create(['phone_number' => $phone_number, 'phonebook_entry_id' => $phonebook_entry_id]);
+                    }
                 }
 
-                $email_obj = new Email($this->getDBResource());
-                foreach ($emails as $email) {
-                    $email_obj->create(['email' => $email, 'phonebook_entry_id' => $phonebook_entry_id]);
+                if (isset($data['emails'])) {
+                    $Email = new Email($this->getDBResource());
+                    foreach ($data['emails'] as $email) {
+                        $Email->create(['email' => $email, 'phonebook_entry_id' => $phonebook_entry_id]);
+                    }
                 }
             } catch (\Exception $e) {
                 $this->delete($phonebook_entry_id);
                 throw new \Exception($e);
             }
-            
+
             return $this->get($phonebook_entry_id);
         }
         return false;
@@ -74,9 +78,9 @@ class PhonebookEntry extends Entity {
 
             $entries = [];
             if ($stmt->rowCount()) {
-                $phonebook = new Phonebook($this->getDBResource());
-                $phone = new Phone($this->getDBResource());
-                $email = new Email($this->getDBResource());
+                $Phonebook = new Phonebook($this->getDBResource());
+                $Phone = new Phone($this->getDBResource());
+                $Email = new Email($this->getDBResource());
 
                 foreach ($stmt->fetchAll(PDO::FETCH_ASSOC) as $phonebook_entry) {
                     $entry = [
@@ -85,9 +89,9 @@ class PhonebookEntry extends Entity {
                         'last_name' => $phonebook_entry['last_name'],
                         'created' => $phonebook_entry['created'],
                         'modified' => $phonebook_entry['modified'],
-                        'phonebook' => $phonebook->get($phonebook_entry['phonebook_id']),
-                        'phone_numbers' => $phone->findByPhonebookEntryId($phonebook_entry['id']),
-                        'emails' => $email->findByPhonebookEntryId($phonebook_entry['id'])
+                        'phonebook' => $Phonebook->get($phonebook_entry['phonebook_id']),
+                        'phone_numbers' => $Phone->findByPhonebookEntryId($phonebook_entry['id']),
+                        'emails' => $Email->findByPhonebookEntryId($phonebook_entry['id'])
                     ];
 
                     $entries []= $entry;
@@ -124,14 +128,18 @@ class PhonebookEntry extends Entity {
             $stmt->bindParam(':id', $id);
 
             if ($stmt->execute()) {
-                $phone = new Phone($this->getDBResource());
-                foreach ($data['phone_numbers'] as $phone_number) {
-                    $phone->update($phone_number['id'], ['phone_number' => $phone_number['phone_number'], 'phonebook_entry_id' => $id]);
+                if (isset($data['phone_numbers'])) {
+                    $Phone = new Phone($this->getDBResource());
+                    foreach ($data['phone_numbers'] as $phone_number) {
+                        $Phone->update($phone_number['id'], ['phone_number' => $phone_number['phone_number'], 'phonebook_entry_id' => $id]);
+                    }
                 }
 
-                $email_obj = new Email($this->getDBResource());
-                foreach ($data['emails'] as $email) {
-                    $email_obj->update($email['id'], ['email' => $email['email'], 'phonebook_entry_id' => $id]);
+                if (isset($data['emails'])) {
+                    $Email = new Email($this->getDBResource());
+                    foreach ($data['emails'] as $email) {
+                        $Email->update($email['id'], ['email' => $email['email'], 'phonebook_entry_id' => $id]);
+                    }
                 }
 
                 return $this->get($id);
@@ -142,19 +150,22 @@ class PhonebookEntry extends Entity {
     }
 
     public function delete($id, $cascade = false) {
+        $phonebook_entry = $this->get($id);
+        if (!$phonebook_entry) {
+            throw new \Exception("There's no phonebook entry with id $id.");
+        }
+
         if ($cascade) {
-            $phonebook_entry = $this->get($id);
-            Logger::write('debug', print_r($phonebook_entry, true));
-            $phone = new Phone($this->getDBResource());
+            $Phone = new Phone($this->getDBResource());
             foreach ($phonebook_entry['phone_numbers'] as $key => $phone_number) {
-                if ($phone->delete($phone_number['id'])) {
+                if ($Phone->delete($phone_number['id'])) {
                     unset($phonebook_entry['phone_numbers'][$key]);
                 }
             }
             
-            $email_obj = new Email($this->getDBResource());
+            $Email = new Email($this->getDBResource());
             foreach ($phonebook_entry['emails'] as $key => $email) {
-                if ($email_obj->delete($email['id'])) {
+                if ($Email->delete($email['id'])) {
                     unset($phonebook_entry['emails'][$key]);
                 }
             }
@@ -184,12 +195,12 @@ class PhonebookEntry extends Entity {
         $phonebook_entries = [];
         if ($stmt->rowCount()) {
             foreach ($stmt->fetchAll(PDO::FETCH_ASSOC) as $phonebook) {
-                $phone = new Phone($this->getDBResource());
-                $email = new Email($this->getDBResource());
+                $Phone = new Phone($this->getDBResource());
+                $Email = new Email($this->getDBResource());
 
                 $phonebook_entry = $phonebook;
-                $phonebook_entry['phone_numbers'] = $phone->findByPhonebookEntryId($phonebook_entry['id']);
-                $phonebook_entry['emails'] = $email->findByPhonebookEntryId($phonebook_entry['id']);
+                $phonebook_entry['phone_numbers'] = $Phone->findByPhonebookEntryId($phonebook_entry['id']);
+                $phonebook_entry['emails'] = $Email->findByPhonebookEntryId($phonebook_entry['id']);
                 $phonebook_entries []= $phonebook_entry;
             }
         }
