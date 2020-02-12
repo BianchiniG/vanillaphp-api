@@ -12,18 +12,34 @@ include_once '../../Entities/Phonebook.php';
 $database = new Database();
 $db = $database->getConnection();
 
-$phonebook = new Phonebook($db);
+$Phonebook = new Phonebook($db);
 $data = json_decode(file_get_contents("php://input"), true);
 
-if (isset($data['id'])) {
-    if ($phonebook->update($data['id'], $data)) {
+try {
+    $updated_phonebook = $Phonebook->update($data['id'], $data);
+
+    if ($updated_phonebook) {
         http_response_code(200);
-        echo json_encode(array("message" => "Phonebook was updated."));
+        echo json_encode(array(
+            "status" => "OK",
+            "code" => 200,
+            "message" => "Phonebook updated successfully.",
+            "responseData" => $updated_phonebook
+        ));
     } else {
         http_response_code(503);
-        echo json_encode(array("message" => "Unable to update phonebook."));
+        echo json_encode(array(
+            "status" => "NOK",
+            "code" => 503,
+            "message" => "Phonebook couldn't be updated. Please, try again."
+        ));
     }
-} else {
-    http_response_code(400);
-    echo json_encode(array("message" => "Unable to update phonebook. The ID must be provided."));
+} catch (\Exception $e) {
+    http_response_code(500);
+    echo json_encode(array(
+        "status" => "NOK",
+        "code" => 500,
+        "message" => $e->getMessage(),
+        "responseData" => $e
+    ));
 }

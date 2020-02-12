@@ -11,19 +11,44 @@ include_once '../../Entities/Phonebook.php';
 $database = new Database();
 $db = $database->getConnection();
 
-$phonebook = new Phonebook($db);
+$Phonebook = new Phonebook($db);
 $data = json_decode(file_get_contents("php://input"), true);
 
-
 if (isset($data['name']) && isset($data['description'])) {
-    if ($phonebook->create($data)) {
-        http_response_code(201);
-        echo json_encode(array("message" => "Phonebook was created."));
-    } else {
-        http_response_code(503);
-        echo json_encode(array("message" => "Unable to create phonebook."));
+    try {
+        $phonebook = $Phonebook->create($data);
+
+        if ($phonebook) {
+            http_response_code(201);
+            echo json_encode(array(
+                "status" => "OK",
+                "code" => 201,
+                "message" => "Phonebook created successfully.",
+                "responseData" => $phonebook
+            ));
+        } else {
+            http_response_code(503);
+            echo json_encode(array(
+                "status" => "NOK",
+                "code" => 503,
+                "message" => "Phonebook couldn't be created. Please, try again."
+            ));
+        }
+    } catch (\Exception $e) {
+        http_response_code(500);
+        echo json_encode(array(
+            "status" => "NOK",
+            "code" => 500,
+            "message" => $e->getMessage(),
+            "responseData" => $e
+        ));
     }
 } else {
     http_response_code(400);
-    echo json_encode(array("message" => "Unable to create phonebook. Data is incomplete."));
+    echo json_encode(array(
+        "status" => "OK",
+        "code" => 400,
+        "message" => "Unable to create phonebook. Data is incomplete.",
+        "responseData" => $data
+    ));
 }

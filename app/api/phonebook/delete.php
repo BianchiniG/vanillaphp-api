@@ -11,25 +11,42 @@ include_once '../../Entities/Phonebook.php';
 $database = new Database();
 $db = $database->getConnection();
 
-$phonebook = new Phonebook($db);
+$Phonebook = new PhonebookEntry($db);
 $data = json_decode(file_get_contents("php://input"), true);
-
 
 if (isset($data['id'])) {
     try {
-        $delete_action = $phonebook->delete($data['id'], $data['cascade']);
-        if ($delete_action) {  // TODO: Unhandled exception.
+        $deleted = $Phonebook->delete($data['id'], (isset($data['cascade']) ? $data['cascade'] : false));
+    
+        if ($deleted) {
             http_response_code(200);
-            echo json_encode(array("message" => "Phonebook was deleted."));
+            echo json_encode(array(
+                "status" => "OK",
+                "code" => 200,
+                "message" => "Phonebook deleted successfully."
+            ));
         } else {
             http_response_code(503);
-            echo json_encode(array("message" => "Unable to delete phonebook: Check if it has phone numbers assigned."));
+            echo json_encode(array(
+                "status" => "NOK",
+                "code" => 503,
+                "message" => "Phonebook couldn't be deleted. Please, try again."
+            ));
         }
     } catch (\Exception $e) {
-        http_response_code(400);
-        echo json_encode(array("message" => "Unable to delete phonebook: ".$e->getMessage()));    
+        http_response_code(500);
+        echo json_encode(array(
+            "status" => "NOK",
+            "code" => 500,
+            "message" => $e->getMessage(),
+            "responseData" => $e
+        ));
     }
 } else {
     http_response_code(400);
-    echo json_encode(array("message" => "Unable to delete phonebook: The ID must be provided."));
+    echo json_encode(array(
+        "status" => "NOK",
+        "code" => 400,
+        "message" => "Phonebook couldn't be deleted (The id must be provided). Please, try again."
+    ));
 }
