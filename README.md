@@ -143,8 +143,6 @@ Emails (
 ## TODO List
 This is what I think it's missing from this project and will be soon added (Or maybe someday in the future!):
 
-* GET endpoint receiving an id and returning a single record (This is an important one!).
 * User authentication.
 * Phonebook entries with images (Maybe through a service that encapsulates the images on a private folder).
 * Migrate the database credentials to os env variables.
-* Implement the backend on a non public folder so that the entire project is not scrappable.
