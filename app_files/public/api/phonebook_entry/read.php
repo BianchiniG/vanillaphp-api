@@ -11,25 +11,38 @@ $db = $database->getConnection();
 
 $phonebook_entry = new PhonebookEntry($db);
 
+$id = isset($_GET['id']) ? $_GET['id'] : null;
+
 try {
-    $phonebook_entries = $phonebook_entry->read();
-    if (count($phonebook_entries) > 0) {
-        http_response_code(200);
-        echo json_encode(array(
-            "status" => "OK",
-            "code" => 200,
-            "message" => "Phonebook entries retrieved successfully.",
-            "responseData" => $phonebook_entries
-        ));
+    if ($id) {
+        $entry = $phonebook_entry->get($id);
+        if (count($entry)) {
+            $code = 200;
+            $message = "Phonebook engtry retrieved successfully.";
+        } else {
+            $code = 404;
+            $message = "No phonebook entry found with id $id";
+        }
+        $responseData = $entry;
     } else {
-        http_response_code(404);
-        echo json_encode(array(
-            "status" => "OK",
-            "code" => 404,
-            "message" => "No Phones found.",
-            "responseData" => $phonebook_entries
-        ));
+        $phonebook_entries = $phonebook_entry->read();
+        if (count($phonebook_entries)) {
+            $code = 200;
+            $message = "Phonebook entries retrieved successfully.";
+        } else {
+            $code = 404;
+            $message = "No phonebook entries found.";
+        }
+        $responseData = $phonebook_entries;
     }
+
+    http_response_code($code);
+    echo json_encode(array(
+        "status" => "OK",
+        "code" => $code,
+        "message" => $message,
+        "responseData" => $phonebook_entries
+    ));
 } catch (\Exception $e) {
     http_response_code(500);
     echo json_encode(array(
