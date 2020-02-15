@@ -1,7 +1,7 @@
 # Vanilla PHP REST API
 Welcome! This is a short termed project (4 days part-time, juggling between work, life and coding this little project!).
 
-The app implements a simple phonebook where you can create entries inside of each of them (With N phones and N emails inside of each phonebook entry).
+The app implements a simple phonebooks app where you can create phonebooks and create entries inside of each of them (With N phones and N emails inside of each phonebook entry).
 
 On this readme you will find all the information about the project itself, files and endpoints first (It's advisable that you read it thoroughly to understand properly the project). And finally you will find two more sections, the "How to test" one and the "TODO List" one (They pretty much explain themselves with the title!).
 
