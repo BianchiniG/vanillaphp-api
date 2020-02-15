@@ -1,0 +1,294 @@
+{
+	"info": {
+		"_postman_id": "9e71cebc-655e-4441-aa11-de40ab19f9a2",
+		"name": "ZipDev",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Phonebook",
+			"item": [
+				{
+					"name": "Read",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url_testing}}/api/phonebook/read.php?id=1",
+							"host": [
+								"{{url_testing}}"
+							],
+							"path": [
+								"api",
+								"phonebook",
+								"read.php"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"New Phonebook\",\n\t\"description\": \"This is a new Phonebook\",\n\t\"phonebook_entries\": [\n\t\t{\n            \"first_name\": \"Test First Name\",\n            \"last_name\": \"Test Last Name\",\n            \"phonebook_id\": 1,\n            \"phone_numbers\": [\n                \"123456789\",\n                \"654321987\"\n            ],\n            \"emails\": [\n                \"test@anothertest.com\"\n            ]\n\t\t}\n    ]\n}"
+						},
+						"url": {
+							"raw": "localhost:9090/api/phonebook/create.php",
+							"host": [
+								"localhost"
+							],
+							"port": "9090",
+							"path": [
+								"api",
+								"phonebook",
+								"create.php"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"id\": 4,\n\t\"name\": \"Updated\",\n    \"description\": \"Updated Phonebook\",\n    \"phonebook_entries\": [\n        {\n            \"id\": 6,\n            \"phone_numbers\": [\n                {\n                    \"id\": 8,\n                    \"phone_number\": \"999666111\"\n                }\n            ],\n            \"emails\": [\n                {\n                    \"id\": 6,\n                    \"email\": \"updated.phonebook.new.user@gmail.com\"\n                }\n            ]\n        }\n    ]\n}"
+						},
+						"url": {
+							"raw": "localhost:9090/api/phonebook/update.php",
+							"host": [
+								"localhost"
+							],
+							"port": "9090",
+							"path": [
+								"api",
+								"phonebook",
+								"update.php"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"id\": 4,\n\t\"cascade\": false\n}"
+						},
+						"url": {
+							"raw": "localhost:9090/api/phonebook/delete.php",
+							"host": [
+								"localhost"
+							],
+							"port": "9090",
+							"path": [
+								"api",
+								"phonebook",
+								"delete.php"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ReadAll",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url_testing}}/api/phonebook/read.php",
+							"host": [
+								"{{url_testing}}"
+							],
+							"path": [
+								"api",
+								"phonebook",
+								"read.php"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "PhonebookEntry",
+			"item": [
+				{
+					"name": "Read",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url_testing}}/api/phonebook_entry/read.php?id=2",
+							"host": [
+								"{{url_testing}}"
+							],
+							"path": [
+								"api",
+								"phonebook_entry",
+								"read.php"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"first_name\": \"New First Name\",\n\t\"last_name\": \"New Last Name\",\n\t\"phonebook_id\": 1,\n\t\"phone_numbers\": [\n\t\t\"1234567890\",\n\t\t\"9876543210\"\n\t],\n\t\"emails\": [\n\t\t\"new.user@gmail.com\"\n\t]\n}"
+						},
+						"url": {
+							"raw": "localhost:9090/api/phonebook_entry/create.php",
+							"host": [
+								"localhost"
+							],
+							"port": "9090",
+							"path": [
+								"api",
+								"phonebook_entry",
+								"create.php"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"id\": 5,\n\t\"first_name\": \"Updated New First Name\",\n\t\"last_name\": \"Updated New Last Name\",\n\t\"phonebook_id\": 1,\n\t\"phone_numbers\": [\n\t\t{\n\t\t\t\"id\": 7,\n\t\t\t\"phone_number\": \"9999999999\"\n\t\t}\n\t],\n\t\"emails\": [\n\t\t{\n\t\t\t\"id\": 5,\n\t\t\t\"email\": \"updated.new.user@gmail.com\"\n\t\t}\n\t]\n}\n"
+						},
+						"url": {
+							"raw": "localhost:9090/api/phonebook_entry/update.php",
+							"host": [
+								"localhost"
+							],
+							"port": "9090",
+							"path": [
+								"api",
+								"phonebook_entry",
+								"update.php"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"id\": 5,\n\t\"cascade\": true\n}"
+						},
+						"url": {
+							"raw": "localhost:9090/api/phonebook_entry/delete.php",
+							"host": [
+								"localhost"
+							],
+							"port": "9090",
+							"path": [
+								"api",
+								"phonebook_entry",
+								"delete.php"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ReadAll",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url_testing}}/api/phonebook_entry/read.php",
+							"host": [
+								"{{url_testing}}"
+							],
+							"path": [
+								"api",
+								"phonebook_entry",
+								"read.php"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "15697748-c8db-4534-b302-cc1707575f7f",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "84d3beeb-7b9d-4190-ad68-7db385140fcd",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "1d112e4e-1183-4b1d-b5a0-8a16b13af527",
+			"key": "url",
+			"value": "64.225.52.4",
+			"type": "string"
+		},
+		{
+			"id": "cafb3b38-93d4-463e-aba3-9fd877a2534f",
+			"key": "url_testing",
+			"value": "localhost:9000",
+			"type": "string"
+		}
+	]
+}
