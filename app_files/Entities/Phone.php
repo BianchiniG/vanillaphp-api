@@ -46,8 +46,7 @@ class Phone extends Entity {
             
             $stmt->bindParam(':phone_number', $phone['phone_number']);
             $stmt->bindParam(':id', $id);
-            
-            Logger::write('debug', print_r($data, true));
+
             if ($stmt->execute()) {
                 return $this->get($id);
             }

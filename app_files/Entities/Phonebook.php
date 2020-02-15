@@ -92,7 +92,6 @@ class Phonebook extends Entity {
     }
 
     public function update($id, $data) {
-        Logger::write('debug', print_r($data, true));
         $query = "UPDATE ".Phonebook::TABLE_NAME." SET name = :name, description = :description WHERE id = :id";
         $stmt = $this->getDBResource()->prepare($query);
 

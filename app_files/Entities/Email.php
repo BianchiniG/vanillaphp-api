@@ -1,6 +1,7 @@
 <?php
 
 include_once('Entity.php');
+include_once('Logger.php');
 
 
 class Email extends Entity {
