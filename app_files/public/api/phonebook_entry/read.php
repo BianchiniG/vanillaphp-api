@@ -18,7 +18,7 @@ try {
         $entry = $phonebook_entry->get($id);
         if (count($entry)) {
             $code = 200;
-            $message = "Phonebook engtry retrieved successfully.";
+            $message = "Phonebook entry retrieved successfully.";
         } else {
             $code = 404;
             $message = "No phonebook entry found with id $id";
@@ -41,7 +41,7 @@ try {
         "status" => "OK",
         "code" => $code,
         "message" => $message,
-        "responseData" => $phonebook_entries
+        "responseData" => $responseData
     ));
 } catch (\Exception $e) {
     http_response_code(500);

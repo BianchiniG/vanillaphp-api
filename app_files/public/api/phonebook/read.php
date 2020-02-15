@@ -41,7 +41,7 @@ try {
         "status" => "OK",
         "code" => $code,
         "message" => $message,
-        "responseData" => $phonebooks
+        "responseData" => $responseData
     ));
 } catch (\Exception $e) {
     http_response_code(500);
