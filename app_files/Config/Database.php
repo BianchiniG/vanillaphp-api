@@ -4,7 +4,7 @@ class Database {
     private $host = "database";
     private $db_name = "zipdev_test";
     private $username = "root";
-    private $password = "test";
+    private $password = "testing";
     public $conn;
 
     public function getConnection() {
@@ -12,9 +12,8 @@ class Database {
 
         try {
             $this->conn = new PDO("mysql:host=" . $this->host . ";dbname=" . $this->db_name, $this->username, $this->password);
-            // $this->conn->exec("set names utf8");
         } catch(PDOException $exception) {
-            // Logger::write('error', 'The connection to the database could not be made.');
+            Logger::write('error', 'The connection to the database could not be made: '.$exception->getMessage());
             echo "Connection error: " . $exception->getMessage();
         }
 
