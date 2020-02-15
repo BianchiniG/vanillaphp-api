@@ -82,7 +82,7 @@ When you clone this project, you will find the following directories and files:
 * ```vanillaphp-api.postman_collection.json```: The postman collection to test the api.
 
 ## Endpoints
-The available endpoints of the API are the following (The complete postman documentation can be found in [here]():
+The available endpoints of the API are the following (The complete postman documentation can be found in [here](./vanillaphp-api.postman_collection.json):
 ### Phonebook
 * CREATE (POST): Create a new phonebook on the address <api_url>/api/phonebook/create.php.
 Sample JSON:
@@ -191,7 +191,7 @@ Sample JSON:
 ```
 
 ## Database
-The database technology is MySQL. You can find the .sql file in [here]() and the tables structure is:
+The database technology is MySQL. You can find the .sql file in [here](./app_files/Utilities/database_setup.sql) and the tables structure is:
 ```
 Phonebooks (
     name: varchar
