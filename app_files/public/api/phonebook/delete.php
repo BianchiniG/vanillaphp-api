@@ -11,7 +11,7 @@ include_once '../../../Entities/Phonebook.php';
 $database = new Database();
 $db = $database->getConnection();
 
-$Phonebook = new PhonebookEntry($db);
+$Phonebook = new Phonebook($db);
 $data = json_decode(file_get_contents("php://input"), true);
 
 if (isset($data['id'])) {
