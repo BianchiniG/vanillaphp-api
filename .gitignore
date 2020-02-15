@@ -1,2 +1,2 @@
-app/database_files/*
-app/logs/*
+database_files/*
+logs/*
