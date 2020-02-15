@@ -1,9 +1,11 @@
 <?php
 
+include_once '../Entities/Logger.php';
+
 class Database {
     private $host = "database";
     private $db_name = "zipdev_test";
-    private $username = "root";
+    private $username = "zipdev_test";
     private $password = "testing";
     public $conn;
 
